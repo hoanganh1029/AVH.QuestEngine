@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CC875C4F-27BA-4918-AF53-CEF93B6DE2E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{7EC7FC24-3B4E-483B-A1EF-21A644FAE66B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{BFB9ECFE-CCB3-487D-9DE6-D1DDC141D4A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVH.QuestEngine.Domain", "src\AVH.QuestEngine.Domain\AVH.QuestEngine.Domain.csproj", "{D2A2755A-CCE1-4E2F-8E9D-71BC5465A2EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVH.QuestEngine.Infrastructure", "src\AVH.QuestEngine.Infrastructure\AVH.QuestEngine.Infrastructure.csproj", "{ADDAD26C-F406-4D81-A991-C654951BE9F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVH.QuestEngine.Application", "src\AVH.QuestEngine.Application\AVH.QuestEngine.Application.csproj", "{93DD4275-A612-4BF8-80D8-1482019E3F80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVH.QuestEngine.WebAPI", "src\AVH.QuestEngine.WebAPI\AVH.QuestEngine.WebAPI.csproj", "{AE9292E7-0F53-4D7A-8C03-053788C1D835}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2A2755A-CCE1-4E2F-8E9D-71BC5465A2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A2755A-CCE1-4E2F-8E9D-71BC5465A2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A2755A-CCE1-4E2F-8E9D-71BC5465A2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A2755A-CCE1-4E2F-8E9D-71BC5465A2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADDAD26C-F406-4D81-A991-C654951BE9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADDAD26C-F406-4D81-A991-C654951BE9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADDAD26C-F406-4D81-A991-C654951BE9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADDAD26C-F406-4D81-A991-C654951BE9F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93DD4275-A612-4BF8-80D8-1482019E3F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93DD4275-A612-4BF8-80D8-1482019E3F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93DD4275-A612-4BF8-80D8-1482019E3F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93DD4275-A612-4BF8-80D8-1482019E3F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE9292E7-0F53-4D7A-8C03-053788C1D835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE9292E7-0F53-4D7A-8C03-053788C1D835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE9292E7-0F53-4D7A-8C03-053788C1D835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE9292E7-0F53-4D7A-8C03-053788C1D835}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D2A2755A-CCE1-4E2F-8E9D-71BC5465A2EF} = {CC875C4F-27BA-4918-AF53-CEF93B6DE2E5}
+		{ADDAD26C-F406-4D81-A991-C654951BE9F0} = {7EC7FC24-3B4E-483B-A1EF-21A644FAE66B}
+		{93DD4275-A612-4BF8-80D8-1482019E3F80} = {CC875C4F-27BA-4918-AF53-CEF93B6DE2E5}
+		{AE9292E7-0F53-4D7A-8C03-053788C1D835} = {BFB9ECFE-CCB3-487D-9DE6-D1DDC141D4A0}
+	EndGlobalSection
+EndGlobal

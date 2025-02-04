@@ -1,0 +1,31 @@
+[
+	{
+	  "Id": "bb2c2373-0b2f-4144-91d0-74e5ac905373",
+	  "TotalQuestPointsRequired": 1000,
+	  "RateFromBet": 0.5,
+	  "LevelBonusRate": 5,
+	  "IsActive": true,
+	  "Milestones": [
+		{
+		  "Index": 1,
+		  "RequiredPoints": 200,
+		  "ChipsAwarded": 50
+		},
+		{
+		  "Index": 2,
+		  "RequiredPoints": 500,
+		  "ChipsAwarded": 150
+		},
+		{
+		  "Index": 3,
+		  "RequiredPoints": 800,
+		  "ChipsAwarded": 300
+		},
+		{
+		  "Index": 4,
+		  "RequiredPoints": 1000,
+		  "ChipsAwarded": 500
+		}
+	  ]
+	}
+]
