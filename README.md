@@ -1,27 +1,41 @@
+# Introduction
+
+The project builds an API service that will be called by the game to progress a player's quest.
+
+It is developed using **ASP.NET Core Web API** and **Entity Framework Core**, following the **Clean Architecture** approach.
+
 # Run Project
 
 **Use Visual Studio**
 
-Open file solution *AVH.QuestEngine.sln* and press F5
+- Open file solution *AVH.QuestEngine.sln*
+- Set **AVH.QuestEngine.WebAPI** in folder Presentation as Startup project
+- Press F5
 
 **Use command line**
 
-Open folder *AVH.QuestEngine* and run command
-`dotnet run`
+- Open folder *AVH.QuestEngine/src/AVH.QuestEngine.WebAPI* 
+- Open PowerShell window in this folder
+- Run command `dotnet run`
+- Open url  [https://localhost:5200](https://localhost:5200/swagger/index.html)
 
-When starting project, the migration runs automatically to create SQLite database (if not existing) and seed default data.
+When starting the project, the migration runs automatically to create SQLite database (if not existing) and seed default data.
 
 ![Alt text](images/AVH.QuestEngine.API.png)
 
 
 # Sequence Diagram
-![Alt text](images/SequenceDiagram.png)
+**POST: api/progress**
+![Alt text](images/Diagram_Progress.png)
+
+**GET: api/state**
+![Alt text](images/Diagram_State.png)
 
 # Quest Configuration
 The file configuration located in [here](src/AVH.QuestEngine.WebAPI/QuestConfig.json)
 
 
-### Quest-Level Properties
+## Quest-Level Properties
 - **`Id`** *(string)* - A unique identifier for the Quest.
 - **`Code`** *(string)* - A short code representing the quest.
 - **`Name`** *(string)* - The full name of the quest.
@@ -30,7 +44,7 @@ The file configuration located in [here](src/AVH.QuestEngine.WebAPI/QuestConfig.
 - **`LevelBonusRate`** *(double)* - The multiplier applied to a player's level to calculate quest points.
 - **`IsActive`** *(boolean)* - Indicates whether the quest is currently active.
 
-### Milestone Properties
+## Milestone Properties
 Each quest consists of multiple **milestones**, which define progress checkpoints.
 
 - **`Index`** *(int)* - The sequential order of the milestone.
@@ -41,7 +55,7 @@ Each quest consists of multiple **milestones**, which define progress checkpoint
 # Player Quest Schema
 The player quest progress is saved to table *PlayerQuestTurn*
 
-### Properties
+## Properties
 
 - **`PlayerId`** *(Guid)*  - A unique identifier for the player participating in the quest.
 - **`QuestId`** *(Guid)* - A unique identifier for the quest in which the player is participating.

@@ -1,0 +1,29 @@
+
+actor Client
+participant WebAPI
+participant Application
+participant Infrastructure
+participant Configuration
+participant Database
+  
+
+Client->>WebAPI: GET /api/state (PlayerId)
+WebAPI->>Application: Validate request & process progress
+
+Application->>Infrastructure: Get active quest
+Infrastructure->>Configuration: Query active quest
+Configuration-->>Infrastructure: Return active quest data
+Infrastructure-->>Application: Return active quest
+Application-->>WebAPI: If no active quest, return BadRequest ("Active quest not exist")
+
+Application->>Infrastructure: Get total points by PlayerId & active QuestId
+Infrastructure->>Database: Query total points
+Database-->>Infrastructure: Return total points
+Infrastructure-->>Application: Return total points
+
+Application->>Application: Calculate TotalQuestPercentCompleted
+Application->>Application: Get LastMilestoneIndexCompleted by active quest and total points
+
+Application-->>WebAPI: Return response (LastMilestoneIndexCompleted, TotalQuestPercentCompleted)
+
+WebAPI-->>Client: Response with state result

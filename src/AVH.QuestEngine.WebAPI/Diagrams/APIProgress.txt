@@ -1,0 +1,34 @@
+
+actor Client
+participant WebAPI
+participant Application
+participant Infrastructure
+participant Configuration
+participant Database
+  
+
+Client->>WebAPI: POST /api/progress (PlayerId, PlayerLevel, ChipAmountBet)
+WebAPI->>Application: Validate request & process progress
+
+Application->>Infrastructure: Get active quest
+Infrastructure->>Configuration: Query active quest
+Configuration-->>Infrastructure: Return active quest data
+Infrastructure-->>Application: Return active quest
+Application-->>WebAPI: If no active quest, return BadRequest ("Active quest not exist")
+
+Application->>Application: Calculate QuestPointsEarned by active quest and request
+Application->>Infrastructure: Insert PlayerQuestTurn into database
+Infrastructure->>Database: Save PlayerQuestTurn
+
+Application->>Infrastructure: Get total points by PlayerId & QuestId
+Infrastructure->>Database: Query total points
+Database-->>Infrastructure: Return total points
+Infrastructure-->>Application: Return total points
+
+Application->>Application: Get MilestonesCompleted by active quest and total points
+
+Application->>Application: Calculate TotalQuestPercentCompleted
+
+Application-->>WebAPI: Return response (QuestPointsEarned, TotalQuestPercentCompleted, MilestonesCompleted)
+
+WebAPI-->>Client: Response with progress result
