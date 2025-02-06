@@ -13,25 +13,29 @@ namespace AVH.QuestEngine.Infrastructure.Repositories
         private readonly IMemoryCache _memoryCache;
         public QuestByConfigurationRepository(IConfiguration configuration, IMemoryCache memoryCache)
         {
-            _configFileName = configuration.GetValue<string>(ConfigConstant.ConfigurationFileNameKey, ConfigConstant.DefaultConfigurationFileName);
+            _configFileName = configuration.GetValue<string>(Constant.ConfigurationFileNameKey, Constant.DefaultConfigurationFileName);
             _memoryCache = memoryCache;
         }
 
         public async Task<Quest?> GetActiveQuest()
-        {
-            var quests = Enumerable.Empty<Quest>();
-
-            if (!_memoryCache.TryGetValue(ConfigConstant.ConfigurationCacheKey, out quests))
+        {            
+            if (!_memoryCache.TryGetValue(Constant.ConfigurationCacheKey, out Quest? activeQuest))
             {
                 if (!string.IsNullOrEmpty(_configFileName) && File.Exists(_configFileName))
                 {
                     var json = await File.ReadAllTextAsync(_configFileName);
-                    quests = JsonSerializer.Deserialize<IEnumerable<Quest>>(json);
+                    var quests = JsonSerializer.Deserialize<IEnumerable<Quest>>(json);
 
-                    _memoryCache.Set(ConfigConstant.ConfigurationCacheKey, quests);
+                    activeQuest = quests?.FirstOrDefault(x => x.IsActive);
+                    if (activeQuest != null && activeQuest.Milestones.Any())
+                    {
+                        activeQuest.Milestones = [.. activeQuest.Milestones.OrderBy(x => x.Index)];
+                    }
+                    _memoryCache.Set(Constant.ConfigurationCacheKey, activeQuest);
                 }
             }
-            return quests?.FirstOrDefault(x => x.IsActive);
+            
+            return activeQuest;
         }
     }
 }

@@ -12,15 +12,15 @@ namespace AVH.QuestEngine.Application.Services
     public class QuestTrackingService : ResponseAttributes, IQuestTrackingService
     {
         private readonly IQuestRepository _questRepository;
-        private readonly IPlayerQuestRepository _playerQuestRepository;
+        private readonly IPlayerQuestTurnRepository _playerQuestTurnRepository;
         private readonly IMapper _mapper;
 
         public QuestTrackingService(
             IQuestRepository questRepository,
-            IPlayerQuestRepository playerQuestRepository,
+            IPlayerQuestTurnRepository playerQuestTurnRepository,
             IMapper mapper)
         {
-            _playerQuestRepository = playerQuestRepository;
+            _playerQuestTurnRepository = playerQuestTurnRepository;
             _questRepository = questRepository;
             _mapper = mapper;
         }
@@ -29,35 +29,28 @@ namespace AVH.QuestEngine.Application.Services
             var activeQuest = await _questRepository.GetActiveQuest();
             if (activeQuest == null)
             {
-                return BadRequest<PlayerQuest>(Message.ActiveQuestNotExist);
+                return BadRequest<PlayerQuestTurn>(Message.ActiveQuestNotExist);
             }
-            var earnedPoint = (request.ChipAmountBet * activeQuest.RateFromBet) + (request.PlayerLevel * activeQuest.LevelBonusRate);
-            var completedMilestones = Enumerable.Empty<MilestoneViewModel>();
 
-            var playerQuest = await _playerQuestRepository.GetByPlayerAndQuest(request.PlayerId, activeQuest.Id);
-            if (playerQuest == null)
+            var earnedPoints = (request.ChipAmountBet * activeQuest.RateFromBet) + (request.PlayerLevel * activeQuest.LevelBonusRate);
+            var playerQuestTurn = new PlayerQuestTurn
             {
-                playerQuest = new PlayerQuest
-                {
-                    Id = Guid.NewGuid(),
-                    QuestId = activeQuest.Id,
-                    PlayerId = request.PlayerId,
-                    TotalPoints = 0
-                };
-                await _playerQuestRepository.AddAsync(playerQuest);
-            }
-            else
-            {
-                playerQuest.TotalPoints += earnedPoint;
-                await _playerQuestRepository.UpdateAsync(playerQuest);
-                completedMilestones = _mapper.Map<IEnumerable<MilestoneViewModel>>(activeQuest.Milestones.Where(x => x.RequiredPoints <= playerQuest.TotalPoints));
-            }
+                QuestId = activeQuest.Id,
+                PlayerId = request.PlayerId,
+                ChipAmountBet = request.ChipAmountBet,
+                PlayerLevel = request.PlayerLevel,
+                EarnedPoints = earnedPoints
+            };
+            await _playerQuestTurnRepository.AddAsync(playerQuestTurn);
+
+            var totalPoints = await _playerQuestTurnRepository.GetTotalPointsByPlayerQuest(request.PlayerId, activeQuest.Id);
+            var completedMilestones = activeQuest.Milestones.Where(x => x.RequiredPoints <= totalPoints && x.RequiredPoints > totalPoints - earnedPoints);
 
             return Success(new QuestProgress()
             {
-                QuestPointsEarned = earnedPoint,
-                TotalQuestPercentCompleted = Math.Round(playerQuest.TotalPoints / activeQuest.TotalQuestPointsRequired * 100, 2),
-                MilestonesCompleted = completedMilestones
+                QuestPointsEarned = earnedPoints,
+                TotalQuestPercentCompleted = Math.Round(totalPoints / activeQuest.TotalQuestPointsRequired * 100, 2),
+                MilestonesCompleted = _mapper.Map<IEnumerable<MilestoneViewModel>>(completedMilestones)
             });
         }
 
@@ -68,16 +61,15 @@ namespace AVH.QuestEngine.Application.Services
             {
                 return BadRequest<QuestState>(Message.ActiveQuestNotExist);
             }
-            var playerQuest = await _playerQuestRepository.GetByPlayerAndQuest(playerId, activeQuest.Id);
-            if (playerQuest == null)
-            {
-                return Success(new QuestState());
-            }
-            var lastMilestone = activeQuest.Milestones.LastOrDefault(x => x.RequiredPoints < playerQuest.TotalPoints);
+            var totalPoints = await _playerQuestTurnRepository.GetTotalPointsByPlayerQuest(playerId, activeQuest.Id);
+
+            var lastMilestoneIndexCompleted = totalPoints == 0
+                                            ? 0
+                                            : (activeQuest.Milestones.LastOrDefault(x => x.RequiredPoints < totalPoints)?.Index ?? 0);
             return Success(new QuestState()
             {
-                TotalQuestPercentCompleted = Math.Round(playerQuest.TotalPoints / activeQuest.TotalQuestPointsRequired * 100, 2),
-                LastMilestoneIndexCompleted = lastMilestone?.Index ?? 0
+                TotalQuestPercentCompleted = Math.Round(totalPoints / activeQuest.TotalQuestPointsRequired * 100, 2),
+                LastMilestoneIndexCompleted = lastMilestoneIndexCompleted
             });
         }
     }

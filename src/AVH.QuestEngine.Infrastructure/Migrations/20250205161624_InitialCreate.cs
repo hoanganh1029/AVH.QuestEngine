@@ -12,13 +12,15 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PlayerQuests",
+                name: "PlayerQuestTurns",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     PlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
                     QuestId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TotalPoints = table.Column<int>(type: "INTEGER", nullable: false),
+                    PlayerLevel = table.Column<int>(type: "INTEGER", nullable: false),
+                    ChipAmountBet = table.Column<int>(type: "INTEGER", nullable: false),
+                    EarnedPoints = table.Column<double>(type: "REAL", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -26,7 +28,7 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerQuests", x => x.Id);
+                    table.PrimaryKey("PK_PlayerQuestTurns", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,11 +54,11 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TotalQuestPointsRequired = table.Column<int>(type: "INTEGER", nullable: false),
-                    RateFromBet = table.Column<int>(type: "INTEGER", nullable: false),
-                    LevelBonusRate = table.Column<int>(type: "INTEGER", nullable: false),
+                    RateFromBet = table.Column<double>(type: "REAL", nullable: false),
+                    LevelBonusRate = table.Column<double>(type: "REAL", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -105,7 +107,7 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                 name: "Milestones");
 
             migrationBuilder.DropTable(
-                name: "PlayerQuests");
+                name: "PlayerQuestTurns");
 
             migrationBuilder.DropTable(
                 name: "Players");

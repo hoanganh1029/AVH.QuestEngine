@@ -3,6 +3,7 @@ using System;
 using AVH.QuestEngine.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AVH.QuestEngine.Infrastructure.Migrations
 {
     [DbContext(typeof(QuestEngineDbContext))]
-    partial class QuestEngineDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250205163400_CreatePlayerQuestIndex")]
+    partial class CreatePlayerQuestIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,10 +137,6 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
@@ -157,10 +156,6 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("RateFromBet")

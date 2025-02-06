@@ -1,4 +1,5 @@
-﻿using AVH.QuestEngine.Domain.Entities;
+﻿using AVH.QuestEngine.Application.Constants;
+using AVH.QuestEngine.Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,28 +14,81 @@ namespace AVH.QuestEngine.Infrastructure.Data
 
             var serviceProvider = scope.ServiceProvider;
 
-            var context = serviceProvider.GetRequiredService<QuestEngineDbContext>();
-            await context.Database.MigrateAsync();
+            var dbContext = serviceProvider.GetRequiredService<QuestEngineDbContext>();
+            await dbContext.Database.MigrateAsync();
 
-            var isExistDefaultData = await context.PlayerQuests.AnyAsync();
+            var isExistDefaultData = await dbContext.PlayerQuestTurns.AnyAsync();
             if (!isExistDefaultData)
             {
-                var defaultPlayerId = new Guid("0b5a9152-414a-41ff-b198-b8a707a4f90c");
-                var defaultQuestId = new Guid("bb2c2373-0b2f-4144-91d0-74e5ac905373");
-                await context.Players.AddAsync(new Player
+                await dbContext.Players.AddAsync(new Player
                 {
-                    Id = defaultPlayerId,
+                    Id = Constant.DefaultPlayerId,
                     UserName = "AnhVH",
-                    Level = 10,
+                    Level = 1,
+                    CreatedDate = DateTime.UtcNow,
+                    CreatedBy = "DataSeeding"
                 });
 
-                await context.PlayerQuests.AddAsync(new PlayerQuest
+                /*
+                await dbContext.PlayerQuestTurns.AddAsync(new PlayerQuestTurn
                 {
                     Id = Guid.NewGuid(),
-                    QuestId = defaultQuestId,
-                    PlayerId = defaultPlayerId,
-                    TotalPoints = 0
+                    QuestId = Constant.DefaultQuestId,
+                    PlayerId = Constant.DefaultPlayerId,
+                    ChipAmountBet = 2,
+                    PlayerLevel = 1,
+                    EarnedPoints = 10,
+                    CreatedDate = DateTime.UtcNow,
+                    CreatedBy = "DataSeeding"
                 });
+                */
+
+                await dbContext.Quests.AddAsync(new Quest
+                {
+                    Id = Constant.DefaultQuestId,
+                    Code = "HPNY",
+                    Name = "Happy New Year",
+                    TotalQuestPointsRequired = 1000,
+                    RateFromBet = 0.4,
+                    LevelBonusRate = 2,
+                    IsActive = true,
+                    CreatedDate = DateTime.UtcNow,
+                    CreatedBy = "DataSeeding"
+                });
+
+                await dbContext.Milestones.AddRangeAsync(new List<Milestone>
+                {
+                    new() {
+                        Id = Guid.NewGuid(),
+                        QuestId = Constant.DefaultQuestId,
+                        Index = 1,
+                        RequiredPoints = 200,
+                        ChipsAwarded = 50
+                    },
+                    new() {
+                        Id = Guid.NewGuid(),
+                        QuestId = Constant.DefaultQuestId,
+                        Index = 2,
+                        RequiredPoints = 400,
+                        ChipsAwarded = 150
+                    },
+                    new() {
+                        Id = Guid.NewGuid(),
+                        QuestId = Constant.DefaultQuestId,
+                        Index = 3,
+                        RequiredPoints = 600,
+                        ChipsAwarded = 300
+                    },
+                    new() {
+                        Id = Guid.NewGuid(),
+                        QuestId = Constant.DefaultQuestId,
+                        Index = 4,
+                        RequiredPoints = 1000,
+                        ChipsAwarded = 500
+                    }
+                });
+
+                await dbContext.SaveChangesAsync();
             }
 
         }

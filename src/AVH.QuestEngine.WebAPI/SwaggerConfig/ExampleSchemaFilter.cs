@@ -1,4 +1,5 @@
-﻿using AVH.QuestEngine.Application.Requests;
+﻿using AVH.QuestEngine.Application.Constants;
+using AVH.QuestEngine.Application.Requests;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -13,9 +14,9 @@ namespace AVH.QuestEngine.WebAPI.SwaggerConfig
             {
                 schema.Example = new OpenApiObject()
                 {
-                    ["playerId"] = new OpenApiString("0b5a9152-414a-41ff-b198-b8a707a4f90c"),
-                    ["playerLevel"] = new OpenApiInteger(10),
-                    ["chipAmountBet"] = new OpenApiInteger(8386)
+                    ["PlayerId"] = new OpenApiString(Constant.DefaultPlayerId.ToString()),
+                    ["PlayerLevel"] = new OpenApiInteger(5),
+                    ["ChipAmountBet"] = new OpenApiInteger(100)
                 };
             }
         }

@@ -14,7 +14,12 @@ namespace AVH.QuestEngine.Infrastructure.Repositories
 
         public async Task<Quest?> GetActiveQuest()
         {
-            return await _currentEntity.SingleOrDefaultAsync(x => x.IsActive);
+            var activeQuest = await _currentEntity.SingleOrDefaultAsync(x => x.IsActive);
+            if (activeQuest != null && activeQuest.Milestones.Any())
+            {
+                activeQuest.Milestones = [.. activeQuest.Milestones.OrderBy(x => x.Index)];
+            }
+            return activeQuest;
         }
     }
 }

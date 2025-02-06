@@ -33,6 +33,8 @@ namespace AVH.QuestEngine.Infrastructure.Repositories.Base
 
         public async Task AddAsync(TEntity entity)
         {
+            entity.Id = Guid.NewGuid();
+            entity.CreatedDate = DateTime.UtcNow;
             _currentEntity.Add(entity);
             await SaveChangeAsync();
         }
@@ -45,6 +47,7 @@ namespace AVH.QuestEngine.Infrastructure.Repositories.Base
 
         public async Task UpdateAsync(TEntity entity)
         {
+            entity.ModifiedDate = DateTime.UtcNow;
             _currentEntity.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             await SaveChangeAsync();

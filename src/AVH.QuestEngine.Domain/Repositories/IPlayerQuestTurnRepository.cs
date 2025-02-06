@@ -4,8 +4,8 @@ using AVH.QuestEngine.Domain.Repositories.Base;
 
 namespace AVH.QuestEngine.Domain.Repositories
 {
-    public interface IPlayerQuestRepository : IBaseRepository<PlayerQuest>, IScopedDependency
+    public interface IPlayerQuestTurnRepository : IBaseRepository<PlayerQuestTurn>, IScopedDependency
     {
-        Task<PlayerQuest?> GetByPlayerAndQuest(Guid playerId, Guid questId);
+        Task<double> GetTotalPointsByPlayerQuest(Guid playerId, Guid questId);
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AVH.QuestEngine.Infrastructure.Migrations
 {
     [DbContext(typeof(QuestEngineDbContext))]
-    [Migration("20250204154502_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250205173615_AddCodeNameQuest")]
+    partial class AddCodeNameQuest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,17 +91,23 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("AVH.QuestEngine.Domain.Entities.PlayerQuest", b =>
+            modelBuilder.Entity("AVH.QuestEngine.Domain.Entities.PlayerQuestTurn", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("ChipAmountBet")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("EarnedPoints")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
@@ -112,15 +118,17 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                     b.Property<Guid>("PlayerId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PlayerLevel")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid>("QuestId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TotalPoints")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.ToTable("PlayerQuests");
+                    b.HasIndex("PlayerId", "QuestId");
+
+                    b.ToTable("PlayerQuestTurns");
                 });
 
             modelBuilder.Entity("AVH.QuestEngine.Domain.Entities.Quest", b =>
@@ -129,20 +137,24 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LevelBonusRate")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("LevelBonusRate")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
@@ -150,10 +162,14 @@ namespace AVH.QuestEngine.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RateFromBet")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<double>("RateFromBet")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TotalQuestPointsRequired")

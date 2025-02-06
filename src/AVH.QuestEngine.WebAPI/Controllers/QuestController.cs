@@ -36,14 +36,14 @@ namespace AVH.QuestEngine.WebAPI.Controllers
         /// <summary>
         /// Get state of quest of player
         /// </summary>
-        /// <param name="playerId">The player id</param>
+        /// <param name="playerId">The player id, e.g. 0b5a9152-414a-41ff-b198-b8a707a4f90c</param>
         /// <returns></returns>
         [HttpGet("state")]
         public async Task<IActionResult> GetStateAsync([FromQuery] Guid playerId)
         {
             if (playerId == Guid.Empty)
             {
-                return BadRequest($"{nameof(playerId)} is invalid");
+                return BadRequest($"The param {nameof(playerId)} is invalid");
             }
             var response = await _questTrackingService.GetStateAsync(playerId) as Response<QuestState>;
             return HandleResponseAsActionResult(response);

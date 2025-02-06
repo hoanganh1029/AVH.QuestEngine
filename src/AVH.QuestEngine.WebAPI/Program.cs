@@ -19,7 +19,12 @@ namespace AVH.QuestEngine.WebAPI
 
             var services = builder.Services;
 
-            services.AddControllers();
+            services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
+
             services.AddDbContext<QuestEngineDbContext>(options =>
                 options
                 .UseLazyLoadingProxies()
@@ -44,7 +49,7 @@ namespace AVH.QuestEngine.WebAPI
 
             services.AddDependencyInjectionAutomatically();
 
-            var isUseConfiguration = builder.Configuration.GetValue<bool>(ConfigConstant.IsUseConfigurationKey);
+            var isUseConfiguration = builder.Configuration.GetValue<bool>(Constant.IsUseConfigurationKey);
             if (isUseConfiguration)
             {
                 services.AddTransient<IQuestRepository, QuestByConfigurationRepository>();
@@ -59,10 +64,7 @@ namespace AVH.QuestEngine.WebAPI
             var app = builder.Build();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint($"/swagger/v1/swagger.json", "Version 1.0");
-            });
+            app.UseSwaggerUI();
 
             // Configure the HTTP request pipeline.
 
