@@ -29,7 +29,7 @@ namespace AVH.QuestEngine.WebAPI
                 options
                 .UseLazyLoadingProxies()
                 .UseSqlite(builder.Configuration.GetConnectionString(nameof(QuestEngineDbContext) ?? throw new InvalidOperationException($"Connection string {nameof(QuestEngineDbContext)} not found."))));
-            
+
             services.AddSwaggerGen(options =>
             {
                 options.SchemaFilter<ExampleSchemaFilter>();
@@ -39,7 +39,7 @@ namespace AVH.QuestEngine.WebAPI
                     Version = "v1",
                     Description = "Use ASP.NET Core Web API to track quest progress"
                 });
-                // Set the comments path for the Swagger JSON and UI base on comment of function in controller.
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
@@ -52,11 +52,11 @@ namespace AVH.QuestEngine.WebAPI
             var isUseConfiguration = builder.Configuration.GetValue<bool>(Constant.IsUseConfigurationKey);
             if (isUseConfiguration)
             {
-                services.AddTransient<IQuestRepository, QuestByConfigurationRepository>();
+                services.AddScoped<IQuestRepository, QuestByConfigurationRepository>();
             }
             else
             {
-                services.AddTransient<IQuestRepository, QuestRepository>();
+                services.AddScoped<IQuestRepository, QuestRepository>();
             }
 
             services.AddMemoryCache();
@@ -65,8 +65,6 @@ namespace AVH.QuestEngine.WebAPI
 
             app.UseSwagger();
             app.UseSwaggerUI();
-
-            // Configure the HTTP request pipeline.
 
             app.UseHttpsRedirection();
 
