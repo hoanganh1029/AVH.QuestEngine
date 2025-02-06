@@ -6,6 +6,8 @@ It is developed using **ASP.NET Core Web API** and **Entity Framework Core**, fo
 
 # Run Project
 
+This sample uses **.NET 8**. Make sure you have the SDK 8.0 installed. You can download it [here](https://dotnet.microsoft.com/download).
+
 **Use Visual Studio**
 
 - Open file solution *AVH.QuestEngine.sln*
